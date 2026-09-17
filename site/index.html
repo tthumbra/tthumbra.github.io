@@ -51,9 +51,9 @@
       Right now that means drivetrain physics models for
       <a href="https://purdueelectricracing.com/" rel="noopener">Purdue Electric Racing</a>,
       written in MATLAB, so the team can find out how a car will behave before anyone
-      machines the part. Before that: an autonomous search-and-rescue drone running
-      CUDA-accelerated CNN detection onboard, and an NLP classifier for finding clickbait
-      in YouTube transcripts.
+      machines the part. Before that: an autonomous search-and-rescue drone that ran a
+      2&nbsp;MB thermal classifier onboard because the payload budget was 150 grams, and
+      an NLP classifier for finding clickbait in YouTube transcripts.
     </p>
 
     <p>
@@ -92,12 +92,12 @@
       </div>
       <p class="entry-where">Independent</p>
       <p>
-        An end-to-end drone platform for locating missing persons. Custom CNN for
-        object detection, CUDA-accelerated so inference runs in real time onboard
-        rather than round-tripping to a ground station. I wrote the full stack —
-        flight path planning, sensor fusion — and modeled the hardware enclosure in CAD.
+        An end-to-end drone platform for locating missing persons in thermal imagery.
+        A MobileNetV2 classifier runs onboard rather than round-tripping to a ground
+        station, compressed to 2 MB to fit a 150 gram payload budget. I wrote the full
+        stack — flight path planning, sensor fusion — and modeled the enclosure in CAD.
       </p>
-      <p class="stack">Python &middot; Java &middot; CUDA &middot; CAD</p>
+      <p class="stack">Python &middot; Java &middot; TensorFlow &middot; MobileNetV2 &middot; CAD</p>
       <p><a href="/drone.html">Full write-up &rarr;</a></p>
     </div>
 
@@ -126,7 +126,7 @@
       <dd>Java, Python, C, C++, JavaScript</dd>
 
       <dt>ML / AI</dt>
-      <dd>TensorFlow, CNN architectures, NLP, CUDA</dd>
+      <dd>TensorFlow/Keras, CNN architectures, transfer learning, NLP</dd>
 
       <dt>Tools</dt>
       <dd>MATLAB, CAD, Git, HTML/CSS</dd>

@@ -59,19 +59,18 @@
       </div>
       <p class="entry-where">Independent project</p>
       <p>
-        An end-to-end autonomous drone platform for locating missing persons. A custom
-        CNN handles object detection, CUDA-accelerated so inference runs in real time on
-        the aircraft — a search drone that has to ask a ground station what it's looking
-        at is a search drone with a radio link as its single point of failure.
+        An end-to-end autonomous drone platform for locating missing persons. A CNN
+        classifies thermal frames for person-presence on the aircraft itself — a search
+        drone that has to ask a ground station what it's looking at is a search drone
+        with a radio link as its single point of failure.
       </p>
       <p>
-        I built the full software stack in Python and Java: flight path planning,
-        onboard sensor fusion, and the glue between them. The hardware enclosure was
-        modeled in CAD. Field tests gave reliable detection performance, which is the
-        part that only shows up once ML, embedded software, and physical hardware have
-        to agree with each other in the same airframe.
+        The 150 gram payload budget drove the model choice: a from-scratch CNN came to
+        7.11 MB, so I moved to MobileNetV2 transfer learning at 2.05 MB — 3.5&times;
+        smaller. I built the rest of the stack in Python and Java (flight path planning,
+        onboard sensor fusion) and modeled the enclosure in CAD.
       </p>
-      <p class="stack">Python &middot; Java &middot; CUDA &middot; CNNs &middot; CAD</p>
+      <p class="stack">Python &middot; Java &middot; TensorFlow &middot; MobileNetV2 &middot; CAD</p>
       <p><a href="/drone.html">Full write-up &rarr;</a></p>
     </div>
 
