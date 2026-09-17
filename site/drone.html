@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autonomous Drone Search &amp; Rescue &mdash; Tanish Thumbraguddi</title>
+<meta name="description" content="A thermal-imaging drone attachment for autonomously locating survivors in disaster areas. CNN detection, CUDA-accelerated, under 150 grams.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13' font-family='monospace'>%3E</text></svg>">
+</head>
+
+<body>
+<div class="page">
+
+  <p class="prompt"><span class="sigil">$</span> cat ~/projects/drone-sar/README</p>
+
+  <header>
+    <h1>Autonomous Drone Search &amp; Rescue</h1>
+    <p class="tagline">
+      Thermal imaging + CNN detection &middot;
+      <time datetime="2024-02">Feb 2024</time> &ndash; <time datetime="2024-08">Aug 2024</time>
+    </p>
+
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/">index</a></li>
+        <li><a href="/projects.html">projects</a></li>
+        <li><a href="mailto:tanishps2007@gmail.com">email</a></li>
+        <li><a href="https://github.com/TTanish2007" rel="me noopener">github</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <h2>The problem</h2>
+
+    <p>
+      Search-and-rescue drones with thermal cameras exist, and they work. The
+      constraint is not the hardware — it is that a trained operator has to sit and
+      watch the live feed, and there are only so many of those people. Officials run
+      drills specifically to recondition how they read thermal footage, because
+      spotting a human-shaped heat signature in clutter at speed is a learned skill
+      that degrades with fatigue.
+    </p>
+
+    <p>
+      Meanwhile there are roughly 782,000 drones registered in the United States, and
+      almost none of them are SAR-equipped. The gap is not aircraft. It is the
+      thermal-plus-analysis payload, and the trained attention to run it.
+    </p>
+
+    <p>
+      This project came out of the aftermath of the 2024 Maui fires and Turkey
+      earthquakes — events where the search area was large, the response window was
+      short, and the number of qualified thermal operators was the binding constraint.
+    </p>
+
+    <h2>The approach</h2>
+
+    <p>
+      Rather than design another SAR drone, I built an <strong>attachment</strong>: a
+      self-contained thermal camera and inference module that mounts to drones people
+      already own. A region that cannot fund a fleet of specialized aircraft can
+      often still put an existing drone in the air.
+    </p>
+
+    <p>
+      That framing set the hard engineering constraint. Common consumer drones have a
+      small maximum payload, so every part — camera, compute, enclosure, mounting —
+      had to come in <strong>under 150 grams total</strong>. Most of the design
+      iteration was spent inside that budget rather than on the model.
+    </p>
+
+    <h2>Detection</h2>
+
+    <p>
+      A custom CNN handles detection on thermal imagery, CUDA-accelerated so inference
+      runs in real time on the aircraft. That choice was the point of the whole
+      architecture: a search drone that has to ask a ground station what it is looking
+      at has made its radio link a single point of failure, in exactly the conditions —
+      disaster zones — where links are least reliable.
+    </p>
+
+    <p>
+      Training ran on a separate machine rather than on the payload hardware. The
+      onboard module only ever runs inference, which is what let the compute stay
+      inside the weight budget.
+    </p>
+
+    <p>
+      Around the model sits the rest of the stack, written in Python and Java: flight
+      path planning for search patterns, and onboard sensor fusion to combine the
+      thermal detections with positional data. The enclosure was modeled in CAD across
+      several build iterations.
+    </p>
+
+    <p class="stack">Python &middot; Java &middot; CUDA &middot; CNNs &middot; thermal imaging &middot; CAD</p>
+
+    <h2>What I took from it</h2>
+
+    <p>
+      The interesting failures were not model failures. They were the places where ML,
+      embedded software, and physical hardware had to agree with each other in the same
+      airframe — weight against compute, inference speed against detection quality,
+      battery against search area. Field tests gave reliable detection performance, but
+      the part worth reporting is that "reliable" was a property of the whole system,
+      not of the network.
+    </p>
+
+    <p><a href="/projects.html">&larr; All projects</a></p>
+
+  </main>
+
+  <footer>
+    <span>Hand-written HTML. No JavaScript.</span>
+    <span>Served from a Raspberry Pi.</span>
+    <span>Updated <time datetime="2026-09-16">2026-09-16</time></span>
+  </footer>
+
+</div>
+</body>
+</html>
