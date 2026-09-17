@@ -262,6 +262,53 @@ ul.bare li::before {
   .spec dd { margin-bottom: 0.8rem; }
 }
 
+/* ---- figures ---------------------------------------------------- */
+
+figure {
+  margin: 1.75rem 0;
+}
+
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
+
+/* The raw sensor frame is 32x24. Scaling it smoothly would be a lie
+   about how much detail is there — nearest-neighbour keeps every
+   pixel a pixel, which is the whole point of showing it. */
+figure img.pixelated {
+  image-rendering: pixelated;
+  width: 192px;
+  max-width: 100%;
+}
+
+figcaption {
+  margin-top: 0.6rem;
+  color: var(--dim);
+  font-size: 0.85em;
+  line-height: 1.55;
+}
+
+figcaption::before {
+  content: "# ";
+  color: var(--accent);
+}
+
+.figpair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 2ch;
+  margin: 1.75rem 0;
+}
+
+.figpair figure { margin: 0; }
+
+@media (max-width: 34rem) {
+  .figpair { grid-template-columns: 1fr; }
+}
+
 /* ---- footer ----------------------------------------------------- */
 
 footer {

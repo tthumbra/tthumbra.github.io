@@ -72,6 +72,82 @@
       iteration was spent inside that budget rather than on the model.
     </p>
 
+    <h2>The hardware</h2>
+
+    <figure>
+      <img src="assets/hardware.jpg" width="860" height="764"
+           alt="A Raspberry Pi Zero 2 W held between two fingers, wired over four
+                coloured jumper leads to a small blue Waveshare MLX9064X thermal
+                camera board resting on a dark wooden surface.">
+      <figcaption>
+        Raspberry Pi Zero 2 W driving a Waveshare MLX90640 thermal camera over
+        I&sup2;C. Four wires: SCL, SDA, VCC, GND.
+      </figcaption>
+    </figure>
+
+    <p>
+      The compute is a Raspberry Pi Zero 2 W and the sensor is an MLX90640, talking
+      over I&sup2;C. Results come off the aircraft over Bluetooth RFCOMM. Both parts
+      were chosen for grams first: together they are a small fraction of the 150 gram
+      budget, which left room for the enclosure, mounting and battery.
+    </p>
+
+    <p>
+      The Pi Zero 2 W has <strong>512&nbsp;MB of RAM</strong>. That single number is
+      why model size mattered so much — it is not an abstract preference for small
+      models, it is the ceiling the whole thing had to fit under.
+    </p>
+
+    <h2>What the sensor actually sees</h2>
+
+    <p>
+      The MLX90640 is a <strong>32&times;24</strong> infrared array. 768 temperature
+      readings per frame, at just under 4 frames per second. Everything downstream is
+      built on that.
+    </p>
+
+    <figure>
+      <img class="pixelated" src="assets/sensor-raw.png" width="32" height="24"
+           alt="A 32 by 24 pixel thermal frame shown at actual resolution, mostly
+                dark blue with a small warm yellow region.">
+      <figcaption>
+        One raw frame at native resolution, nearest-neighbour scaled. 768 pixels.
+      </figcaption>
+    </figure>
+
+    <p>
+      Upscaled with bicubic interpolation and a jet colormap for the human operator,
+      the same data looks like this:
+    </p>
+
+    <div class="figpair">
+      <figure>
+        <img src="assets/thermal-person.jpg" width="800" height="600"
+             alt="Thermal image in blue-to-red false colour. A tall red and orange
+                  human-shaped heat signature stands out near the centre against a
+                  cool blue background.">
+        <figcaption>
+          Person present. Peak 88.3&deg;F against a 74.5&deg;F floor.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="assets/thermal-empty.jpg" width="800" height="600"
+             alt="Thermal image in blue-to-green false colour showing only diffuse
+                  background texture with no distinct heat signature.">
+        <figcaption>
+          No person. Background texture only.
+        </figcaption>
+      </figure>
+    </div>
+
+    <p>
+      Worth being clear about what that upscaling is and is not. An 800&times;600
+      thermal frame holds 480,000 pixels interpolated from 768 real measurements. The
+      interpolation makes the image legible to a person; it adds no information. I
+      trained early models on the upscaled frames anyway, which in hindsight was
+      mostly a way of making a very small dataset look larger than it was.
+    </p>
+
     <h2>Classification</h2>
 
     <p>
@@ -134,14 +210,39 @@
       that size is measured in grams.
     </p>
 
+    <h2>Building the thing</h2>
+
     <p>
       Around the model sits the rest of the stack, written in Python and Java: flight
-      path planning for search patterns, and onboard sensor fusion to combine the
-      thermal detections with positional data. The enclosure was modeled in CAD across
-      several build iterations.
+      path planning for search patterns, and onboard sensor fusion to combine thermal
+      hits with positional data. It started on graph paper.
     </p>
 
-    <p class="stack">Python &middot; Java &middot; TensorFlow/Keras &middot; MobileNetV2 &middot; thermal imaging &middot; CAD</p>
+    <figure>
+      <img src="assets/sketch.jpg" width="980" height="735"
+           alt="A hand-drawn engineering sketch on graph paper showing a drone
+                airframe from several angles with annotations and measurements.">
+      <figcaption>Early airframe and mounting sketches.</figcaption>
+    </figure>
+
+    <p>
+      The enclosure went through several CAD iterations, each one a negotiation with
+      the weight budget: enough structure to protect the boards and hold the sensor
+      pointed down, not a gram more.
+    </p>
+
+    <figure>
+      <img src="assets/enclosure.jpg" width="820" height="590"
+           alt="A grey CAD render of the payload enclosure: an open rectangular
+                housing with a flat mounting plate on top.">
+      <figcaption>Payload enclosure, CAD render.</figcaption>
+    </figure>
+
+    <p class="stack">
+      Python &middot; Java &middot; TensorFlow/Keras &middot; MobileNetV2 &middot;
+      Raspberry Pi Zero 2 W &middot; MLX90640 &middot; I&sup2;C &middot; Bluetooth
+      RFCOMM &middot; CAD
+    </p>
 
     <h2>What I took from it</h2>
 
