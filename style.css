@@ -118,6 +118,10 @@ nav [aria-current="page"] {
    the dashes are real characters clipped by overflow, so they land on
    the monospace grid instead of floating above it like a css border. */
 
+/* Anchored headings (#hobbies, #work) shouldn't land flush against the
+   top of the viewport when jumped to. */
+h2[id] { scroll-margin-top: 2rem; }
+
 h2 {
   display: flex;
   align-items: baseline;
