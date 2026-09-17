@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thermal classifier demo &mdash; Tanish Thumbraguddi</title>
+<meta name="description" content="Run the drone's thermal person-presence classifier in your browser. MobileNetV2, 1.1 MB, entirely client-side.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13' font-family='monospace'>%3E</text></svg>">
+</head>
+
+<body>
+<div class="page">
+
+  <p class="prompt"><span class="sigil">$</span> ./classify --model keras_model.h5</p>
+
+  <header>
+    <h1>Thermal classifier</h1>
+    <p class="tagline">The drone's onboard model, running in your browser</p>
+
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/">index</a></li>
+        <li><a href="/projects.html">projects</a></li>
+        <li><a href="/#hobbies">hobbies</a></li>
+        <li><a href="mailto:tanishps2007@gmail.com">email</a></li>
+        <li><a href="https://github.com/TTanish2007" rel="me noopener">github</a></li>
+        <li><a href="https://www.linkedin.com/in/tanish-thumbraguddi/" rel="me noopener">linkedin</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <p>
+      This is the actual model from the
+      <a href="/drone.html">search-and-rescue payload</a> &mdash; MobileNetV2,
+      538,508 parameters &mdash; converted to run client-side. Nothing is uploaded
+      anywhere; the weights download to your machine and inference happens there.
+    </p>
+
+    <h2>Pick a frame</h2>
+
+    <div class="demo-tiles" id="tiles"></div>
+
+    <h2>Pick a region</h2>
+
+    <p class="dim">
+      Cropping changes what the model can see. That is the interesting part.
+    </p>
+
+    <div class="demo-regions" id="regions"></div>
+
+    <p>
+      <button id="run" class="demo-run" type="button">Run the classifier</button>
+      <span id="status" class="demo-status"></span>
+    </p>
+
+    <h2>What the model sees</h2>
+
+    <div class="demo-out">
+      <figure class="demo-input">
+        <canvas id="input" width="224" height="224" aria-label="The 224 by 224 pixel crop fed to the model"></canvas>
+        <figcaption>224&times;224, normalised to [-1, 1]</figcaption>
+      </figure>
+      <div class="demo-result" id="result">
+        <p class="dim">Press <strong>Run the classifier</strong> to load the model
+        (about 1.2&nbsp;MB) and classify the selection.</p>
+      </div>
+    </div>
+
+    <h2>Reading the output</h2>
+
+    <p>
+      The model has exactly two outputs and no notion of <em>where</em> &mdash; it
+      answers "is there a person in this frame", not "where is the person". A
+      positive result on a real flight is useful because the drone knows its own
+      position when the frame is captured, so a hit plus telemetry is a coordinate.
+    </p>
+
+    <p>
+      <strong>Try the right half of each frame.</strong> On the frame containing a
+      person, cropping to the right removes the heat signature and the model
+      correctly reports nothing. On the empty frame, the right half contains a warm
+      corner, and the model calls it a person. That second one is a false positive,
+      and it is the most honest thing on this page: the model reacts to warm
+      regions, which means some of its accuracy is probably temperature and colour
+      statistics rather than a learned sense of what a person's shape is.
+    </p>
+
+    <h2>Caveats worth stating</h2>
+
+    <ul class="bare">
+      <li>Only two frames survive from the original dataset, so this is a
+        demonstration of the model, not an evaluation of it.</li>
+      <li>The jet colormap rescales to each frame's own temperature range, so
+        colours are not comparable between frames.</li>
+      <li>Weights are float16. uint8 quantisation was tried first and was
+        rejected &mdash; it inverted the empty frame's prediction while still
+        looking confident.</li>
+      <li>Class order (0 = person) is not stored in the model file. It was
+        recovered by testing, and the method is written up in the repository.</li>
+    </ul>
+
+    <p><a href="/drone.html">&larr; Back to the project write-up</a></p>
+
+  </main>
+
+  <footer>
+    <span>The one page here that uses JavaScript.</span>
+    <span>Inference runs on your device.</span>
+    <span>Updated <time datetime="2026-09-17">2026-09-17</time></span>
+  </footer>
+
+</div>
+
+<script src="assets/tf.min.js"></script>
+<script src="assets/demo.js"></script>
+</body>
+</html>

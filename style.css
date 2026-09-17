@@ -414,6 +414,124 @@ figcaption::before {
   .figpair { grid-template-columns: 1fr; }
 }
 
+/* ---- demo page -------------------------------------------------- */
+
+.demo-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 2ch;
+  margin: 0 0 1rem;
+}
+
+.demo-tile {
+  display: block;
+  padding: 0;
+  border: 1px solid var(--rule);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.demo-tile img { display: block; width: 100%; height: auto; }
+
+.demo-tile-label {
+  display: block;
+  padding: 0.5rem 1ch;
+  font-size: 0.85em;
+}
+
+.demo-tile[aria-pressed="true"] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.demo-tile:focus-visible,
+.demo-region:focus-visible,
+.demo-run:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.demo-regions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1ch;
+  margin-bottom: 1.5rem;
+}
+
+.demo-region,
+.demo-run {
+  font: inherit;
+  cursor: pointer;
+  background: none;
+  color: inherit;
+  border: 1px solid var(--rule);
+  padding: 0.45rem 2ch;
+}
+
+.demo-region[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.demo-region:hover, .demo-run:hover { border-color: var(--accent); }
+
+.demo-run {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.demo-run[disabled] { opacity: 0.5; cursor: wait; }
+
+.demo-status { color: var(--dim); font-size: 0.85em; margin-left: 2ch; }
+
+.demo-out {
+  display: grid;
+  grid-template-columns: 224px 1fr;
+  gap: 1.5rem 3ch;
+  align-items: start;
+}
+
+.demo-input { margin: 0; }
+.demo-input canvas {
+  display: block;
+  width: 224px;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  background: #000;
+}
+
+/* Probability bars drawn with block characters, so they sit on the same
+   grid as everything else instead of being a separate visual language. */
+.demo-bars { margin-bottom: 1rem; }
+
+.demo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1ch;
+  color: var(--dim);
+  font-size: 0.9em;
+  line-height: 1.9;
+}
+
+.demo-bar.is-top { color: var(--fg); }
+.demo-bar.is-top .demo-bar-track { color: var(--accent); }
+
+.demo-bar-label { flex: 0 0 13ch; }
+.demo-bar-track { letter-spacing: -0.05em; white-space: nowrap; }
+.demo-bar-pct   { flex: 0 0 7ch; text-align: right; font-variant-numeric: tabular-nums; }
+
+.demo-verdict { margin: 0; }
+
+@media (max-width: 34rem) {
+  .demo-tiles, .demo-out { grid-template-columns: 1fr; }
+  .demo-bar-label { flex-basis: 100%; }
+}
+
 /* ---- footer ----------------------------------------------------- */
 
 footer {
