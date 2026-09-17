@@ -1,9 +1,0 @@
-[Unit]
-Description=Update DuckDNS record with current public IP
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=oneshot
-ExecStart=/opt/duckdns/duckdns-update.sh
-User=root

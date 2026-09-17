@@ -6,25 +6,26 @@
 ## Goal
 
 A personal site for Tanish Thumbraguddi that reads as deliberately made
-rather than generated, and that runs on a Raspberry Pi behind a DuckDNS
-domain over HTTPS.
+rather than generated, and that is cheap to host and keep online.
 
 ## Decisions
 
 | Area | Choice | Why |
 |---|---|---|
 | Sections | About, Projects, Contact | Chosen by user. No blog — nothing to put in it yet, and an empty blog ages badly. |
-| Stack | Hand-written HTML + CSS | No build step, no dependencies, no runtime process on the Pi. Also the strongest signal the site wasn't machine-generated. |
-| Serving | Caddy | Automatic Let's Encrypt certificates and renewal from a ~20 line config. nginx + certbot is more parts for the same result. |
+| Stack | Hand-written HTML + CSS | No build step, no dependencies, no server-side runtime. Also the strongest signal the site wasn't machine-generated. |
+| Serving | GitHub Pages | Originally a Raspberry Pi behind DuckDNS + Caddy; dropped 2026-09-16. See below. |
 | Look | Terminal / monospace | Chosen by user. |
-| JavaScript | None | Nothing on the page needs it. Lets the CSP deny scripts outright. |
+| JavaScript | None | Nothing on the page needs it. |
 
 ## Structure
 
-- `site/index.html` — about, selected work (3), toolkit, contact
-- `site/projects.html` — full projects, experience, education
-- `site/404.html`
-- `site/style.css` — single stylesheet, no preprocessor
+- `index.html` — about, selected work (3), toolkit, contact
+- `projects.html` — full projects, experience, education
+- `drone.html` — search-and-rescue drone write-up
+- `404.html`
+- `style.css` — single stylesheet, no preprocessor
+- `assets/` — web-sized images
 
 About was folded into `index.html` rather than given its own page: the
 copy is four paragraphs, and a dedicated page for four paragraphs reads
@@ -55,21 +56,33 @@ What it does instead:
 
 ## Deployment
 
-Caddy serves `/var/www/tanish`. `deploy.ps1` (Windows) and `deploy.sh`
-(WSL/Linux/macOS) copy `site/` to a staging directory on the Pi, then
-publish into the web root with `rsync --delete`, so the web root is
-never half-written mid-copy.
+GitHub Pages, deploying from `main` at the repository root. Push is the
+whole deploy process. The repo is named `tthumbra.github.io`, making it a
+user site served at the domain root, so root-absolute links resolve.
 
-A systemd timer runs `duckdns-update.sh` every 5 minutes to keep the DNS
-record on the current public IP.
+### Superseded: Raspberry Pi + DuckDNS + Caddy
 
-### Known risk: port 80
+The original design self-hosted from a Raspberry Pi behind a DuckDNS
+domain, with Caddy terminating TLS. That was removed on 2026-09-16 in
+favour of GitHub Pages. The reasoning, recorded because the tradeoff is
+worth remembering:
 
-Caddy proves domain ownership over inbound port 80 (HTTP-01). Two
-conditions break this and neither is fixable in config: an ISP that
-blocks port 80, and CGNAT. The README leads with a check for both and
-documents the DNS-01 fallback (`xcaddy` build with the DuckDNS plugin),
-which removes the port 80 requirement.
+- **Fragility that config can't fix.** Caddy proves domain ownership over
+  inbound port 80. An ISP that blocks port 80, or CGNAT, defeats that
+  entirely — the fallback was a custom `xcaddy` build with the DuckDNS DNS
+  plugin, which is a lot of machinery for a static site.
+- **It publishes a home IP.** Anyone resolving the domain learns the
+  residential address of the host. That is a real cost with no
+  corresponding benefit here.
+- **Uptime becomes a chore.** Power blips, ISP IP rotation, SD card wear.
+  A no-JS static site gains nothing from a server it can be on the hook for.
+- **`tanish.duckdns.org` is a worse URL** on a resume than
+  `tthumbra.github.io`, and a bought domain via CNAME beats both.
+
+What was lost: control over response headers. The Caddy config set a
+strict CSP denying scripts outright; GitHub Pages allows no custom
+headers. For a static site with no scripts and no external resources the
+practical exposure is small, but it is a genuine reduction, not a wash.
 
 ## Privacy decisions
 
@@ -77,8 +90,8 @@ which removes the port 80 requirement.
   a public page — a scrapeable number is a permanent spam magnet.
 - **Resume PDF not committed.** The PDF contains the phone number, so
   publishing it to a public repo would undo the point above.
-- **DuckDNS token never committed.** Read from `/etc/duckdns.conf`
-  (mode 600) on the Pi; `.gitignore` covers stray copies.
+- **No secrets in the repository.** Nothing the site needs is secret now
+  that hosting is GitHub Pages.
 
 ## Deferred
 
