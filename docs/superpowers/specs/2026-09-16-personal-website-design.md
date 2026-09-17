@@ -93,6 +93,49 @@ practical exposure is small, but it is a genuine reduction, not a wash.
 - **No secrets in the repository.** Nothing the site needs is secret now
   that hosting is GitHub Pages.
 
+## Model notes (drone classifier)
+
+Recovered 2026-09-16 by running the model, because the information was
+not in the file and nobody remembered it. Recorded here so it does not
+have to be worked out a third time.
+
+`keras_model.h5` is a Teachable Machine export: MobileNetV2 alpha=0.35
+backbone, GlobalAveragePooling2D, Dense(100, relu), Dense(2, softmax,
+use_bias=False). 538,508 parameters. Input 224x224x3.
+
+**Class order: index 0 = person present, index 1 = no person.**
+
+**Preprocessing: resize to 224x224 RGB, then `(x / 127.5) - 1`.**
+
+How it was established. Teachable Machine normally ships a `labels.txt`
+alongside the model; this one was missing, and no class names appear
+anywhere in the h5. So the mapping was determined empirically:
+
+- Keras 3 cannot load the legacy Keras 2.4 h5 directly (the stored
+  `DepthwiseConv2D` config carries a `groups` key Keras 3 rejects, and
+  the nested-Sequential wiring fails). The model was instead rebuilt
+  from `keras.applications.MobileNetV2(alpha=0.35)` with weights loaded
+  by layer name — all 104 weight-bearing layers matched, 0 missing, and
+  the rebuilt parameter count equals the h5's exactly.
+- Both known thermal frames were classified correctly under this
+  mapping, at very high confidence (1.0000 and 0.9916), and the `[0,1]`
+  normalisation variant agreed.
+- Twelve augmented variants (flips, crops) were consistent once the crop
+  contents are accounted for: the person frame's right half legitimately
+  excludes the person, and the empty frame's right half contains a warm
+  corner region.
+
+Two things that fell out of this and are worth keeping:
+
+- **Preprocessing is not cosmetic here.** Feeding raw 0-255 instead of
+  `(x/127.5)-1` inverts the prediction on both frames — confidently, with
+  no error. Any reimplementation that gets the input range wrong will
+  look like it works and be wrong about everything.
+- **The warm-corner false positive is direct evidence** for the caveat on
+  `drone.html`: the model responds to warm regions, so high validation
+  accuracy may partly reflect colour and temperature statistics rather
+  than learned human shape.
+
 ## Deferred
 
 - Phone-scrubbed resume PDF for download.
