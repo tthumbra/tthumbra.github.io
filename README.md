@@ -3,7 +3,8 @@
 Personal site for Tanish Thumbraguddi. Five HTML files and one
 stylesheet, served by GitHub Pages.
 
-No framework and no build step. Editing the site means editing HTML.
+No framework, no build step, no runtime. Editing the site means editing
+HTML — apart from `demo.html`, which runs the classifier client-side.
 
 ```
 index.html      about, selected work, toolkit, contact
@@ -69,7 +70,8 @@ certificate automatically. Tick **Enforce HTTPS** once it's provisioned.
 - **No phone number on the site**, deliberately. It's on the resume, but
   a scrapeable number on a public page is a permanent spam magnet.
 - **JavaScript lives on `demo.html` only.** Every other page is plain
-  HTML and CSS; keep it that way unless a page genuinely needs script.
+  HTML and CSS. Adding script to one of those is worth being deliberate
+  about.
 - **GitHub Pages doesn't let you set response headers**, so there's no
   Content-Security-Policy here. Everything the demo loads is served from
   this repository, but it's still a real difference from a self-hosted

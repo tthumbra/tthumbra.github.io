@@ -1,12 +1,13 @@
 /* ==================================================================
    tanish thumbraguddi — personal site
-   hand-written css. no framework, no build step.
+   hand-written css. no framework, no build step, almost no javascript.
 
    layout notes:
    the whole thing is a fixed character-width column (--measure).
    because the font is monospace, every line wraps on the same
-   character boundary, so the page reads like a text file. keep all
-   widths in ch units.
+   character boundary, so the page reads like a text file. that
+   is the one genuinely good thing about a monospace layout and
+   it is worth not breaking. keep all widths in ch units.
    ================================================================== */
 
 :root {
@@ -18,7 +19,9 @@
   --measure: 72ch;
 }
 
-/* amber-on-dark by default, paper in light mode. */
+/* amber-on-dark by default, paper in light mode. supporting both is
+   cheap and it is the difference between a site someone tuned and a
+   site someone generated. */
 @media (prefers-color-scheme: light) {
   :root {
     --bg:     #faf8f3;
@@ -54,6 +57,20 @@ body {
   max-width: var(--measure);
   margin: 0 auto;
 }
+
+/* ---- prompt line ------------------------------------------------ */
+/* used exactly once, at the top of the page. it is a label, not a
+   simulation: nothing types itself, nothing blinks, you cannot enter
+   commands into it. the moment it pretends to be interactive it stops
+   being a design and starts being a costume. */
+
+.prompt {
+  color: var(--dim);
+  margin: 0 0 1.75rem;
+  font-size: 0.9em;
+}
+
+.prompt .sigil { color: var(--accent); }
 
 /* ---- header ----------------------------------------------------- */
 
@@ -281,7 +298,7 @@ ul.bare li {
 }
 
 ul.bare li::before {
-  content: "\00b7 ";         /* · */
+  content: "$ ";
   color: var(--accent);
 }
 
@@ -305,7 +322,8 @@ ul.bare li::before {
 }
 
 /* ---- folds ------------------------------------------------------ */
-/* Native <details>: expandable sections with no script.
+/* Native <details>. The only interactive element HTML gives you without
+   JavaScript, which is why every page but the demo ships zero script.
 
    Both markers are four characters wide — "[+] " and "[-] " — so the
    heading text does not shift sideways when a row opens. That is the
@@ -408,9 +426,9 @@ figure img {
   border: 1px solid var(--rule);
 }
 
-/* The raw sensor frame is 32x24. Nearest-neighbour keeps every pixel a
-   pixel, so the image does not imply more detail than the sensor
-   captured. */
+/* The raw sensor frame is 32x24. Scaling it smoothly would be a lie
+   about how much detail is there — nearest-neighbour keeps every
+   pixel a pixel, which is the whole point of showing it. */
 figure img.pixelated {
   image-rendering: pixelated;
   width: 192px;
@@ -542,7 +560,7 @@ figcaption::before {
 }
 
 /* Probability bars drawn with block characters, so they sit on the same
-   character grid as everything else. */
+   grid as everything else instead of being a separate visual language. */
 .demo-bars { margin-bottom: 1rem; }
 
 .demo-bar {
@@ -618,7 +636,7 @@ footer {
     --accent: #000;
   }
   body { padding: 0; font-size: 11pt; }
-  nav, footer { display: none; }
+  nav, footer, .prompt { display: none; }
   .cta { border-color: #000; }
   a { text-decoration: none; }
 }
