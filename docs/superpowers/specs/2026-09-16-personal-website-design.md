@@ -95,8 +95,6 @@ practical exposure is small, but it is a genuine reduction, not a wash.
 
 ## Deferred
 
-- LinkedIn link — URL unknown, omitted rather than shipped broken.
-  One-line HTML comment in `index.html` shows where it goes.
 - Phone-scrubbed resume PDF for download.
 - `codearenamvp`, `kalshi`, `SATprep` are recent local projects not on
   the resume and not described here, because writing them up would mean
