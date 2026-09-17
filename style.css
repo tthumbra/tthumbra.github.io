@@ -262,6 +262,40 @@ ul.bare li::before {
   .spec dd { margin-bottom: 0.8rem; }
 }
 
+/* ---- tables ----------------------------------------------------- */
+/* Wide tables scroll inside their own box rather than making the
+   whole page scroll sideways on a phone. */
+
+.tablewrap {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.4rem 2ch 0.4rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+th {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+td.num { font-variant-numeric: tabular-nums; }
+
 /* ---- figures ---------------------------------------------------- */
 
 figure {

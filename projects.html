@@ -65,10 +65,11 @@
         with a radio link as its single point of failure.
       </p>
       <p>
-        The 150 gram payload budget drove the model choice: a from-scratch CNN came to
-        7.11 MB, so I moved to MobileNetV2 transfer learning at 2.05 MB — 3.5&times;
-        smaller. I built the rest of the stack in Python and Java (flight path planning,
-        onboard sensor fusion) and modeled the enclosure in CAD.
+        The 150 gram payload budget drove the model choice. The first working version hit
+        94% accuracy in a 1.41 GB file no Raspberry Pi could run; four trials later a
+        224&times;224 MobileNetV2 reached 97.41% in 4.5 MB. I built the rest of the stack
+        in Python and Java (flight path planning, onboard sensor fusion) and modeled the
+        enclosure in CAD.
       </p>
       <p class="stack">Python &middot; Java &middot; TensorFlow &middot; MobileNetV2 &middot; CAD</p>
       <p><a href="/drone.html">Full write-up &rarr;</a></p>

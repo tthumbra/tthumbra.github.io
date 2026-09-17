@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Autonomous Drone Search &amp; Rescue &mdash; Tanish Thumbraguddi</title>
-<meta name="description" content="A thermal-imaging drone attachment for locating survivors in disaster areas. MobileNetV2 person-presence classification at 2 MB, under a 150 gram payload budget.">
+<meta name="description" content="A thermal-imaging drone attachment for locating survivors in disaster areas. Four training trials took the model from 1.41 GB to 4.5 MB under a 150 gram payload budget.">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13' font-family='monospace'>%3E</text></svg>">
 </head>
@@ -170,44 +170,132 @@
     <h2>Making it fit</h2>
 
     <p>
-      The 150 gram budget is what decided the model architecture, not accuracy. A
-      lighter model means less memory, which means a smaller and lighter compute
-      module, which is the difference between a payload that flies on a consumer drone
-      and one that does not.
+      The 150 gram budget decided the model, not the accuracy number. The target was
+      80% — good enough to be worth flying — on hardware small enough to fly at all.
+      Getting there took four trials, and the useful part is that two of them failed.
+    </p>
+
+    <div class="tablewrap">
+      <table>
+        <caption class="dim">Four training trials, from the engineering notebook</caption>
+        <thead>
+          <tr>
+            <th>Trial</th><th>Input</th><th>Config</th>
+            <th>Accuracy</th><th>Model size</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td><td>600&times;800</td><td>3 conv layers, batch 32</td>
+            <td class="num">94%</td><td class="num">1.41 GB</td>
+          </tr>
+          <tr>
+            <td>2</td><td>600&times;800</td><td>1 conv layer, batch 16, 10 epochs</td>
+            <td class="num">46%</td><td class="num">1.44 GB</td>
+          </tr>
+          <tr>
+            <td>3</td><td>32&times;24</td><td>2 conv layers, batch 16, 10 epochs</td>
+            <td class="num">41%</td><td class="num">&mdash;</td>
+          </tr>
+          <tr>
+            <td>4</td><td>224&times;224</td><td>batch 32, 20 epochs</td>
+            <td class="num">97.41%</td><td class="num">4.5 MB</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Trial 1 cleared the accuracy target immediately and was useless anyway: a
+      <strong>1.41 gigabyte</strong> model does not run on a Raspberry Pi, let alone an
+      ESP32. Accuracy was never the thing that needed fixing.
     </p>
 
     <p>
-      I built a CNN from scratch first. It worked, but it was the wrong shape for the
-      constraint: it flattened a 21&times;21&times;64 feature map into 28,224 values
-      feeding a dense layer, and that single layer held 1,806,336 parameters —
-      <strong>97% of the entire network</strong>. The whole model came to 1.86M
-      parameters, 7.11&nbsp;MB in float32.
+      Trial 2 is the one I learned from. The hypothesis was that the layer count was
+      making the model huge, so I cut it to a single convolutional layer. The model got
+      <strong>bigger</strong> — 1.44 GB — and accuracy collapsed to 46%, which for two
+      classes is worse than a coin flip.
     </p>
 
     <p>
-      Replacing it with a MobileNetV2 (&alpha;&nbsp;=&nbsp;0.35) transfer-learning
-      model cut that to 538,508 parameters and <strong>2.05&nbsp;MB</strong>. The
-      saving is structural rather than incidental: MobileNetV2 ends in global average
-      pooling, so the classifier head sees 1,280 features instead of 28,224 and costs
-      128K parameters instead of 1.8M — a 14&times; reduction in the head alone, before
-      counting the depthwise-separable convolutions in the backbone.
+      The reason is the opposite of the intuition. Each conv-and-pool stage
+      <em>shrinks</em> the feature map. Removing layers means the map arriving at the
+      flatten step is larger, so the dense layer behind it needs more parameters, not
+      fewer. Nearly all the weight sat in that one dense layer the whole time. The lever
+      was never the number of layers — it was the size of the input image.
     </p>
 
-    <dl class="spec">
-      <dt>From scratch</dt>
-      <dd>1,862,850 params &middot; 7.11 MB &middot; Flatten &rarr; 28,224 features</dd>
-
-      <dt>Deployed</dt>
-      <dd>538,508 params &middot; 2.05 MB &middot; GlobalAvgPool &rarr; 1,280 features</dd>
-
-      <dt>Result</dt>
-      <dd>3.5&times; smaller, inside the payload budget</dd>
-    </dl>
+    <p>
+      Trial 3 tested that by going to the sensor's native 32&times;24. It worked, in the
+      sense that training time per epoch fell from 49 seconds to effectively zero. It
+      also dropped to 41% accuracy. 768 pixels is enough for a person to spot a warm
+      body and not enough for this model to learn one.
+    </p>
 
     <p>
-      The lesson I actually took from this one: the interesting constraint was never
-      the accuracy number. It was that a model has a physical size, and on an aircraft
-      that size is measured in grams.
+      Trial 4 settled at <strong>224&times;224</strong> with a batch size of 32 over 20
+      epochs: <strong>97.41%</strong> validation accuracy in a
+      <strong>4.5&nbsp;MB</strong> model. Against trial 1 that is a 99.7% reduction in
+      size while gaining accuracy.
+    </p>
+
+    <h2>Results</h2>
+
+    <div class="figpair">
+      <figure>
+        <img src="assets/trial1-acc.png" width="640" height="480" loading="lazy"
+             alt="Line chart, epochs versus accuracy, rising steeply from 0.75 to
+                  approximately 1.0 and flattening.">
+        <figcaption>Trial 1 &mdash; 600&times;800. Reaches ~1.0. Model: 1.41 GB.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/trial2-acc.png" width="640" height="478" loading="lazy"
+             alt="Line chart, epochs versus accuracy, essentially flat between 0.48
+                  and 0.505 across all epochs.">
+        <figcaption>Trial 2 &mdash; one conv layer. Flat at chance. Learning nothing.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/trial3-acc.png" width="640" height="486" loading="lazy"
+             alt="Line chart, epochs versus accuracy, rising unevenly from 0.54 to
+                  about 0.68.">
+        <figcaption>Trial 3 &mdash; 32&times;24. Rising but well short.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/trial4-acc.png" width="640" height="475" loading="lazy"
+             alt="Line chart, epochs versus accuracy, climbing from 0.5 to roughly
+                  0.95 over about eighteen epochs.">
+        <figcaption>Trial 4 &mdash; 224&times;224. The configuration that shipped.</figcaption>
+      </figure>
+    </div>
+
+    <p class="dim">
+      Training accuracy per epoch. The 97.41% figure above is final validation accuracy,
+      measured separately.
+    </p>
+
+    <h2>What I'd check before trusting 97%</h2>
+
+    <p>
+      I would not present that number without the caveats, because two things about this
+      setup could inflate it.
+    </p>
+
+    <p>
+      The dataset is small — low hundreds of frames, captured by me, in a handful of
+      settings. A validation split drawn from that pool shares backgrounds and subjects
+      with the training data, so it measures something narrower than "finds people in
+      thermal images."
+    </p>
+
+    <p>
+      The bigger one: the jet colormap <strong>rescales to each frame's own
+      temperature range</strong>. A frame containing a person has a hot maximum, so the
+      whole image gets remapped differently from an empty one. A model handed the
+      rendered RGB can reach high accuracy by reading global colour statistics without
+      ever learning what a person's shape looks like. Classifying the raw 32&times;24
+      temperature array instead of the false-colour render would remove that shortcut,
+      and that is the first experiment I would run on this now.
     </p>
 
     <h2>Building the thing</h2>
