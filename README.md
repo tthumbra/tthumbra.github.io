@@ -1,18 +1,18 @@
 # tthumbra.github.io
 
-Personal site for Tanish Thumbraguddi. Four HTML files and one
+Personal site for Tanish Thumbraguddi. Five HTML files and one
 stylesheet, served by GitHub Pages.
 
-No framework, no build step, no JavaScript, no runtime. Editing the site
-means editing HTML.
+No framework and no build step. Editing the site means editing HTML.
 
 ```
 index.html      about, selected work, toolkit, contact
 projects.html   projects, experience, education
 drone.html      search-and-rescue drone write-up
+demo.html       in-browser thermal classifier demo
 404.html
 style.css
-assets/         images
+assets/         images, model weights, demo.js, tf.min.js
 ```
 
 ## Local preview
@@ -68,11 +68,11 @@ certificate automatically. Tick **Enforce HTTPS** once it's provisioned.
 
 - **No phone number on the site**, deliberately. It's on the resume, but
   a scrapeable number on a public page is a permanent spam magnet.
-- **No JavaScript anywhere.** If you add some, it will be the first
-  third-party-shaped thing on the page — worth being deliberate about.
+- **JavaScript lives on `demo.html` only.** Every other page is plain
+  HTML and CSS; keep it that way unless a page genuinely needs script.
 - **GitHub Pages doesn't let you set response headers**, so there's no
-  Content-Security-Policy here. For a static site with no scripts and no
-  external resources there's very little to exploit, but it's a real
-  difference from a self-hosted setup where you control the headers.
+  Content-Security-Policy here. Everything the demo loads is served from
+  this repository, but it's still a real difference from a self-hosted
+  setup where you control the headers.
 - **Images** live in `assets/` and are pre-sized for the web. Re-encode
   anything new rather than committing straight off a camera.

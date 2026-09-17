@@ -12,11 +12,9 @@
 <body>
 <div class="page">
 
-  <p class="prompt"><span class="sigil">$</span> ls -la ~/projects</p>
-
   <header>
     <h1>Projects</h1>
-    <p class="tagline">What I've built, where I've worked, what I studied</p>
+    <p class="tagline">Projects, experience, and education</p>
 
     <nav aria-label="Main">
       <ul>
@@ -43,14 +41,13 @@
       <p class="entry-where">Purdue Electric Racing &mdash; drivetrain simulation &amp; controls</p>
       <p>
         Physics models in MATLAB that simulate EV drivetrain dynamics, so the team can
-        predict performance metrics up front instead of discovering them on track. Every
-        question the simulator answers is a physical testing cycle nobody has to run.
+        predict performance metrics up front instead of discovering them on track.
       </p>
       <p>
         Steering and throttle response algorithms are derived from historical testing
-        data rather than idealized curves. That mattered most in the two regimes where
-        an idealized model is least honest — corner entry and hard acceleration — and
-        that is where simulation fidelity improved.
+        data rather than idealized curves. That improved fidelity most in the two
+        regimes where idealized curves diverge furthest: corner entry and hard
+        acceleration.
       </p>
       <p class="stack">MATLAB &middot; vehicle dynamics &middot; controls</p>
     </div>
@@ -63,9 +60,8 @@
       <p class="entry-where">Independent project</p>
       <p>
         An end-to-end autonomous drone platform for locating missing persons. A CNN
-        classifies thermal frames for person-presence on the aircraft itself — a search
-        drone that has to ask a ground station what it's looking at is a search drone
-        with a radio link as its single point of failure.
+        classifies thermal frames for person-presence on the aircraft itself, so the
+        radio link to a ground station is not a single point of failure.
       </p>
       <p>
         The 150 gram payload budget drove the model choice. The first working version hit
@@ -76,6 +72,11 @@
       </p>
       <p class="stack">Python &middot; Java &middot; TensorFlow &middot; MobileNetV2 &middot; CAD</p>
       <p><a href="/drone.html">Full write-up &rarr;</a></p>
+
+      <a class="cta" href="/demo.html">
+        <span class="cta-title">Run the classifier in your browser</span>
+        <span class="cta-note">The real model, client-side. Nothing is uploaded.</span>
+      </a>
     </div>
 
     <div class="entry">
@@ -91,9 +92,9 @@
         precision and recall.
       </p>
       <p>
-        This was my first pass through the whole ML lifecycle end to end — collection,
-        feature engineering, training, evaluation, and then standing up in front of
-        200+ people at an online demo to explain why the model did what it did.
+        My first pass through the full ML lifecycle: collection, feature engineering,
+        training, and evaluation. I presented the results to 200+ people at an online
+        demo.
       </p>
       <p class="stack">TensorFlow &middot; Python &middot; NLP &middot; text classification</p>
     </div>
@@ -109,8 +110,7 @@
       <p>
         One-on-one and group instruction in algebra through Calculus&nbsp;II and Java, to
         70+ students. Designed Java project curricula — GUI applications, file-search
-        tools — to teach object-oriented programming through something that runs rather
-        than something that compiles.
+        tools — to teach object-oriented programming through working applications.
       </p>
     </div>
 
@@ -166,9 +166,8 @@
   </main>
 
   <footer>
-    <span>Hand-written HTML. No JavaScript.</span>
     <span>Served by GitHub Pages.</span>
-    <span>Updated <time datetime="2026-09-16">2026-09-16</time></span>
+    <span>Updated <time datetime="2026-09-17">2026-09-17</time></span>
   </footer>
 
 </div>

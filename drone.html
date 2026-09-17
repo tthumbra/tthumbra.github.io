@@ -12,8 +12,6 @@
 <body>
 <div class="page">
 
-  <p class="prompt"><span class="sigil">$</span> cat ~/projects/drone-sar/README</p>
-
   <header>
     <h1>Autonomous Drone Search &amp; Rescue</h1>
     <p class="tagline">
@@ -49,7 +47,7 @@
 
     <p>
       Meanwhile there are roughly 782,000 drones registered in the United States, and
-      almost none of them are SAR-equipped. The gap is not aircraft. It is the
+      almost none of them are SAR-equipped. What is missing is the
       thermal-plus-analysis payload, and the trained attention to run it.
     </p>
 
@@ -96,9 +94,8 @@
     </p>
 
     <p>
-      The Pi Zero 2 W has <strong>512&nbsp;MB of RAM</strong>. That single number is
-      why model size mattered so much — it is not an abstract preference for small
-      models, it is the ceiling the whole thing had to fit under.
+      The Pi Zero 2 W has <strong>512&nbsp;MB of RAM</strong>. That is the ceiling
+      the whole system had to fit under, and it is why model size mattered.
     </p>
 
     <h2>What the sensor actually sees</h2>
@@ -147,40 +144,39 @@
       Worth being clear about what that upscaling is and is not. An 800&times;600
       thermal frame holds 480,000 pixels interpolated from 768 real measurements. The
       interpolation makes the image legible to a person; it adds no information. I
-      trained early models on the upscaled frames anyway, which in hindsight was
-      mostly a way of making a very small dataset look larger than it was.
+      trained early models on the upscaled frames anyway, which gave the model
+      nothing the raw frames did not already contain.
     </p>
 
     <h2>Classification</h2>
 
     <p>
       The onboard model answers one question per frame: is there a person in this
-      thermal image. Not where — whether. For a first pass over a search grid that is
-      the useful question, because the drone already knows its own position when the
-      frame is captured, so a positive classification plus telemetry is a map
-      coordinate.
+      thermal image. It answers whether, not where. For a first pass over a search
+      grid that is the useful question, because the drone already knows its own
+      position when the frame is captured, so a positive classification plus
+      telemetry is a map coordinate.
     </p>
 
     <p>
-      Inference runs on the aircraft rather than on a ground station. That was the
-      point of the whole architecture: a search drone that has to ask a ground station
-      what it is looking at has made its radio link a single point of failure, in
-      exactly the conditions — disaster zones — where links are least reliable.
-      Training ran on a separate machine; the payload only ever runs inference, which
-      is what let the compute stay inside the weight budget.
+      Inference runs on the aircraft rather than on a ground station. A drone that
+      has to ask a ground station what it is looking at depends on a radio link that
+      is least reliable in exactly the conditions this was built for. Training ran on
+      a separate machine; the payload only ever runs inference, which is what let the
+      compute stay inside the weight budget.
     </p>
 
-    <p>
-      <a href="/demo.html">Run the classifier in your browser &rarr;</a>
-      The real model, client-side. Nothing is uploaded.
-    </p>
+    <a class="cta" href="/demo.html">
+      <span class="cta-title">Run the classifier in your browser</span>
+      <span class="cta-note">The real model, client-side. Nothing is uploaded.</span>
+    </a>
 
     <h2>Making it fit</h2>
 
     <p>
       The 150 gram budget decided the model, not the accuracy number. The target was
-      80% — good enough to be worth flying — on hardware small enough to fly at all.
-      Getting there took four trials, and the useful part is that two of them failed.
+      80% accuracy on hardware light enough to fly. It took four trials to get there,
+      and two of them failed.
     </p>
 
     <div class="tablewrap">
@@ -214,31 +210,29 @@
     </div>
 
     <p>
-      Trial 1 cleared the accuracy target immediately and was useless anyway: a
+      Trial 1 cleared the accuracy target immediately and was still unusable: a
       <strong>1.41 gigabyte</strong> model does not run on a Raspberry Pi, let alone an
-      ESP32. Accuracy was never the thing that needed fixing.
+      ESP32.
     </p>
 
     <p>
-      Trial 2 is the one I learned from. The hypothesis was that the layer count was
-      making the model huge, so I cut it to a single convolutional layer. The model got
-      <strong>bigger</strong> — 1.44 GB — and accuracy collapsed to 46%, which for two
-      classes is worse than a coin flip.
+      For trial 2 I assumed the layer count was making the model huge, so I cut it to
+      a single convolutional layer. The model got <strong>bigger</strong> — 1.44 GB —
+      and accuracy collapsed to 46%, below chance for two classes.
     </p>
 
     <p>
       The reason is the opposite of the intuition. Each conv-and-pool stage
       <em>shrinks</em> the feature map. Removing layers means the map arriving at the
       flatten step is larger, so the dense layer behind it needs more parameters, not
-      fewer. Nearly all the weight sat in that one dense layer the whole time. The lever
-      was never the number of layers — it was the size of the input image.
+      fewer. Nearly all the weight sat in that one dense layer the whole time, and the
+      variable that controlled it was the size of the input image.
     </p>
 
     <p>
-      Trial 3 tested that by going to the sensor's native 32&times;24. It worked, in the
-      sense that training time per epoch fell from 49 seconds to effectively zero. It
-      also dropped to 41% accuracy. 768 pixels is enough for a person to spot a warm
-      body and not enough for this model to learn one.
+      Trial 3 tested that by going to the sensor's native 32&times;24. Training time
+      per epoch fell from 49 seconds to effectively zero, and accuracy fell with it, to
+      41%. 768 pixels was not enough for this model to learn from.
     </p>
 
     <p>
@@ -282,22 +276,21 @@
       measured separately.
     </p>
 
-    <h2>What I'd check before trusting 97%</h2>
+    <h2>Caveats on the 97%</h2>
 
     <p>
-      I would not present that number without the caveats, because two things about this
-      setup could inflate it.
+      Two things about this setup could inflate that number.
     </p>
 
     <p>
       The dataset is small — low hundreds of frames, captured by me, in a handful of
       settings. A validation split drawn from that pool shares backgrounds and subjects
-      with the training data, so it measures something narrower than "finds people in
-      thermal images."
+      with the training data, so it measures something narrower than general
+      performance on thermal imagery.
     </p>
 
     <p>
-      The bigger one: the jet colormap <strong>rescales to each frame's own
+      The second: the jet colormap <strong>rescales to each frame's own
       temperature range</strong>. A frame containing a person has a hot maximum, so the
       whole image gets remapped differently from an empty one. A model handed the
       rendered RGB can reach high accuracy by reading global colour statistics without
@@ -309,9 +302,9 @@
     <h2>Building the thing</h2>
 
     <p>
-      Around the model sits the rest of the stack, written in Python and Java: flight
-      path planning for search patterns, and onboard sensor fusion to combine thermal
-      hits with positional data. It started on graph paper.
+      The rest of the stack is written in Python and Java: flight path planning for
+      search patterns, and onboard sensor fusion to combine thermal hits with
+      positional data.
     </p>
 
     <figure>
@@ -322,9 +315,9 @@
     </figure>
 
     <p>
-      The enclosure went through several CAD iterations, each one a negotiation with
-      the weight budget: enough structure to protect the boards and hold the sensor
-      pointed down, not a gram more.
+      The enclosure went through several CAD iterations against the weight budget:
+      enough structure to protect the boards and hold the sensor pointed down, and no
+      more than that.
     </p>
 
     <figure>
@@ -361,11 +354,10 @@
     <h2>What I took from it</h2>
 
     <p>
-      The interesting failures were not model failures. They were the places where ML,
-      embedded software, and physical hardware had to agree with each other in the same
-      airframe — weight against compute, inference speed against classification
-      quality, battery against search area. Any one of those is tractable alone. The
-      project was the negotiation between them.
+      The hardest constraints were not in the model. They were in the places where ML,
+      embedded software, and hardware had to agree in the same airframe: weight against
+      compute, inference speed against classification quality, battery against search
+      area.
     </p>
 
     <p><a href="/projects.html">&larr; All projects</a></p>
@@ -373,9 +365,8 @@
   </main>
 
   <footer>
-    <span>Hand-written HTML. No JavaScript.</span>
     <span>Served by GitHub Pages.</span>
-    <span>Updated <time datetime="2026-09-16">2026-09-16</time></span>
+    <span>Updated <time datetime="2026-09-17">2026-09-17</time></span>
   </footer>
 
 </div>

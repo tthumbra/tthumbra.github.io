@@ -17,8 +17,6 @@
 <body>
 <div class="page">
 
-  <p class="prompt"><span class="sigil">$</span> whoami</p>
-
   <header>
     <h1>Tanish Thumbraguddi</h1>
     <p class="tagline">Computer science @ Purdue &middot; ML/NLP, systems, full-stack</p>
@@ -42,15 +40,15 @@
 
     <p>
       I'm a computer science student at Purdue, junior standing by credits. Most of
-      what I build ends up on the boundary between software and something physical —
-      a car, a drone, a sensor feed that doesn't behave the way the spec said it would.
+      what I build sits between software and hardware — vehicle dynamics models,
+      drone payloads, sensor pipelines.
     </p>
 
     <p>
       Right now that means drivetrain physics models for
       <a href="https://purdueelectricracing.com/" rel="noopener">Purdue Electric Racing</a>,
-      written in MATLAB, so the team can find out how a car will behave before anyone
-      machines the part. Before that: an autonomous search-and-rescue drone that ran a
+      written in MATLAB, so the team can predict how a car will behave before the
+      parts are machined. Before that: an autonomous search-and-rescue drone that ran a
       4.5&nbsp;MB thermal classifier onboard because the payload budget was 150 grams,
       and an NLP classifier for finding clickbait in YouTube transcripts.
     </p>
@@ -77,9 +75,9 @@
       <p class="entry-where">Purdue Electric Racing</p>
       <p>
         MATLAB models of EV drivetrain dynamics, built so the team can predict
-        performance numbers without burning a testing cycle to find them. Steering and
-        throttle response are derived from historical test data, which sharpened
-        fidelity most where it mattered: corner entry and acceleration.
+        performance numbers without spending a testing cycle to find them. Steering
+        and throttle response are derived from historical test data, which improved
+        fidelity most at corner entry and acceleration.
       </p>
       <p class="stack">MATLAB &middot; vehicle dynamics</p>
     </div>
@@ -93,12 +91,17 @@
       <p>
         An end-to-end drone platform for locating missing persons in thermal imagery.
         A MobileNetV2 classifier runs onboard rather than round-tripping to a ground
-        station — squeezed from 1.41 GB to 4.5 MB across four trials to fit a 150
+        station — reduced from 1.41 GB to 4.5 MB across four trials to fit a 150
         gram payload budget. I wrote the full
         stack — flight path planning, sensor fusion — and modeled the enclosure in CAD.
       </p>
       <p class="stack">Python &middot; Java &middot; TensorFlow &middot; MobileNetV2 &middot; CAD</p>
       <p><a href="/drone.html">Full write-up &rarr;</a></p>
+
+      <a class="cta" href="/demo.html">
+        <span class="cta-title">Run the classifier in your browser</span>
+        <span class="cta-note">The real model, client-side. Nothing is uploaded.</span>
+      </a>
     </div>
 
     <div class="entry">
@@ -108,11 +111,11 @@
       </div>
       <p class="entry-where">Inspirit AI</p>
       <p>
-        A CNN-based NLP classifier that reads YouTube transcripts and decides whether
-        the title was lying to you. Tokenization and feature extraction pipeline,
-        hyperparameter tuning, validated on precision and recall rather than raw
-        accuracy — the classes are lopsided enough that accuracy would have flattered
-        the model. Presented to 200+ people at an online demo.
+        A CNN-based NLP classifier that reads YouTube transcripts and predicts
+        whether the title oversold the video. Tokenization and feature extraction
+        pipeline, hyperparameter tuning, validated on precision and recall rather
+        than raw accuracy, since the classes are imbalanced. Presented to 200+ people
+        at an online demo.
       </p>
       <p class="stack">TensorFlow &middot; Python &middot; NLP</p>
     </div>
@@ -173,7 +176,7 @@
           <a href="/drone.html">search-and-rescue payload</a>. Knowing what a drone
           actually does in the air — how it drifts, how quickly a battery goes, how
           much weight changes the handling — made the 150 gram limit on that project
-          a real constraint rather than a number in a spec.
+          concrete.
         </p>
 
         <figure>
@@ -210,9 +213,8 @@
   </main>
 
   <footer>
-    <span>Hand-written HTML. No JavaScript.</span>
     <span>Served by GitHub Pages.</span>
-    <span>Updated <time datetime="2026-09-16">2026-09-16</time></span>
+    <span>Updated <time datetime="2026-09-17">2026-09-17</time></span>
   </footer>
 
 </div>

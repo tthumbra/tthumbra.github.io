@@ -12,8 +12,6 @@
 <body>
 <div class="page">
 
-  <p class="prompt"><span class="sigil">$</span> ./classify --model keras_model.h5</p>
-
   <header>
     <h1>Thermal classifier</h1>
     <p class="tagline">The drone's onboard model, running in your browser</p>
@@ -47,7 +45,7 @@
     <h2>Pick a region</h2>
 
     <p class="dim">
-      Cropping changes what the model can see. That is the interesting part.
+      Cropping changes what the model can see.
     </p>
 
     <div class="demo-regions" id="regions"></div>
@@ -83,13 +81,12 @@
       <strong>Try the right half of each frame.</strong> On the frame containing a
       person, cropping to the right removes the heat signature and the model
       correctly reports nothing. On the empty frame, the right half contains a warm
-      corner, and the model calls it a person. That second one is a false positive,
-      and it is the most honest thing on this page: the model reacts to warm
-      regions, which means some of its accuracy is probably temperature and colour
-      statistics rather than a learned sense of what a person's shape is.
+      corner, and the model calls it a person. That is a false positive: the model
+      reacts to warm regions, so some of its accuracy is probably temperature and
+      colour statistics rather than a learned sense of what a person's shape is.
     </p>
 
-    <h2>Caveats worth stating</h2>
+    <h2>Caveats</h2>
 
     <ul class="bare">
       <li>Only two frames survive from the original dataset, so this is a
@@ -108,8 +105,8 @@
   </main>
 
   <footer>
-    <span>The one page here that uses JavaScript.</span>
     <span>Inference runs on your device.</span>
+    <span>Served by GitHub Pages.</span>
     <span>Updated <time datetime="2026-09-17">2026-09-17</time></span>
   </footer>
 
