@@ -1,6 +1,6 @@
 /* ==================================================================
    tanish thumbraguddi — personal site
-   hand-written css. no framework, no build step, almost no javascript.
+   hand-written css. no framework, no build step.
 
    layout notes:
    the whole thing is a fixed character-width column (--measure).
@@ -322,8 +322,7 @@ ul.bare li::before {
 }
 
 /* ---- folds ------------------------------------------------------ */
-/* Native <details>. The only interactive element HTML gives you without
-   JavaScript, which is why every page but the demo ships zero script.
+/* Native <details>, so a row opens without anything having to run.
 
    Both markers are four characters wide — "[+] " and "[-] " — so the
    heading text does not shift sideways when a row opens. That is the
