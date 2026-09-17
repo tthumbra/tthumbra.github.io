@@ -166,6 +166,10 @@ p {
 
 p:last-child { margin-bottom: 0; }
 
+/* The demo page opens with a paragraph instead of a section heading, so
+   it gets the gap below the nav that an h2's top margin would give it. */
+main > p:first-child { margin-top: 3rem; }
+
 a {
   color: inherit;
   text-decoration: underline;
