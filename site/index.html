@@ -1,0 +1,153 @@
+<!doctype html>
+<!--
+  To add LinkedIn, drop this into the <nav> list and the contact list:
+  <li><a href="https://www.linkedin.com/in/YOUR-HANDLE" rel="me noopener">linkedin</a></li>
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tanish Thumbraguddi</title>
+<meta name="description" content="Computer science student at Purdue. ML/NLP, systems, and full-stack work.">
+<meta name="author" content="Tanish Thumbraguddi">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13' font-family='monospace'>%3E</text></svg>">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tanish Thumbraguddi">
+<meta property="og:description" content="Computer science student at Purdue. ML/NLP, systems, and full-stack work.">
+</head>
+
+<body>
+<div class="page">
+
+  <p class="prompt"><span class="sigil">$</span> whoami</p>
+
+  <header>
+    <h1>Tanish Thumbraguddi</h1>
+    <p class="tagline">Computer science @ Purdue &middot; ML/NLP, systems, full-stack</p>
+
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/" aria-current="page">index</a></li>
+        <li><a href="/projects.html">projects</a></li>
+        <li><a href="mailto:tanishps2007@gmail.com">email</a></li>
+        <li><a href="https://github.com/TTanishps2007" rel="me noopener">github</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <h2>About</h2>
+
+    <p>
+      I'm a computer science student at Purdue, junior standing by credits. Most of
+      what I build ends up on the boundary between software and something physical —
+      a car, a drone, a sensor feed that doesn't behave the way the spec said it would.
+    </p>
+
+    <p>
+      Right now that means drivetrain physics models for
+      <a href="https://purdueelectricracing.com/" rel="noopener">Purdue Electric Racing</a>,
+      written in MATLAB, so the team can find out how a car will behave before anyone
+      machines the part. Before that: an autonomous search-and-rescue drone running
+      CUDA-accelerated CNN detection onboard, and an NLP classifier for finding clickbait
+      in YouTube transcripts.
+    </p>
+
+    <p>
+      Before Purdue I was in San Jose. I taught algebra through Calculus&nbsp;II and Java
+      to about seventy students, coached Taekwondo for a couple hundred hours, and
+      competed in USACO through Silver division.
+    </p>
+
+    <p>
+      I'm looking for software engineering and ML engineering internships.
+      The fastest way to reach me is
+      <a href="mailto:tanishps2007@gmail.com">email</a>.
+    </p>
+
+    <h2>Selected work</h2>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Drivetrain Physics Simulator</h3>
+        <span class="entry-meta">Sep 2025 &ndash; present</span>
+      </div>
+      <p class="entry-where">Purdue Electric Racing</p>
+      <p>
+        MATLAB models of EV drivetrain dynamics, built so the team can predict
+        performance numbers without burning a testing cycle to find them. Steering and
+        throttle response are derived from historical test data, which sharpened
+        fidelity most where it mattered: corner entry and acceleration.
+      </p>
+      <p class="stack">MATLAB &middot; vehicle dynamics</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Autonomous Drone Search &amp; Rescue</h3>
+        <span class="entry-meta">Feb 2024 &ndash; Aug 2024</span>
+      </div>
+      <p class="entry-where">Independent</p>
+      <p>
+        An end-to-end drone platform for locating missing persons. Custom CNN for
+        object detection, CUDA-accelerated so inference runs in real time onboard
+        rather than round-tripping to a ground station. I wrote the full stack —
+        flight path planning, sensor fusion — and modeled the hardware enclosure in CAD.
+      </p>
+      <p class="stack">Python &middot; Java &middot; CUDA &middot; CAD</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Clickbait Detection Model</h3>
+        <span class="entry-meta">Jan 2023 &ndash; Jul 2023</span>
+      </div>
+      <p class="entry-where">Inspirit AI</p>
+      <p>
+        A CNN-based NLP classifier that reads YouTube transcripts and decides whether
+        the title was lying to you. Tokenization and feature extraction pipeline,
+        hyperparameter tuning, validated on precision and recall rather than raw
+        accuracy — the classes are lopsided enough that accuracy would have flattered
+        the model. Presented to 200+ people at an online demo.
+      </p>
+      <p class="stack">TensorFlow &middot; Python &middot; NLP</p>
+    </div>
+
+    <p><a href="/projects.html">Full project list and background &rarr;</a></p>
+
+    <h2>Toolkit</h2>
+
+    <dl class="spec">
+      <dt>Languages</dt>
+      <dd>Java, Python, C, C++, JavaScript</dd>
+
+      <dt>ML / AI</dt>
+      <dd>TensorFlow, CNN architectures, NLP, CUDA</dd>
+
+      <dt>Tools</dt>
+      <dd>MATLAB, CAD, Git, HTML/CSS</dd>
+
+      <dt>Competitive</dt>
+      <dd>USACO Silver division &mdash; top 10% nationally (Java)</dd>
+    </dl>
+
+    <h2>Contact</h2>
+
+    <ul class="bare">
+      <li><a href="mailto:tanishps2007@gmail.com">tanishps2007@gmail.com</a></li>
+      <li><a href="https://github.com/TTanishps2007" rel="me noopener">github.com/TTanishps2007</a></li>
+    </ul>
+
+  </main>
+
+  <footer>
+    <span>Hand-written HTML. No JavaScript.</span>
+    <span>Served from a Raspberry Pi.</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+# ===================================================================
+#  Caddyfile  —  tanish.duckdns.org
+#
+#  Install to /etc/caddy/Caddyfile on the Raspberry Pi.
+#
+#  CHANGE THE DOMAIN on the line below to your real DuckDNS
+#  subdomain. It is the only thing in this file you must edit.
+# ===================================================================
+
+tanish.duckdns.org {
+
+	root * /var/www/tanish
+	file_server
+
+	encode zstd gzip
+
+	# Serve 404.html for missing paths, with a real 404 status code
+	# (not a 200, which would let search engines index empty pages).
+	handle_errors {
+		@404 expression {err.status_code} == 404
+		rewrite @404 /404.html
+		file_server
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options    "nosniff"
+		Referrer-Policy           "strict-origin-when-cross-origin"
+		X-Frame-Options           "DENY"
+
+		# This site has no JavaScript, no external fonts, and no
+		# third-party anything. Since nothing legitimate needs to
+		# load, the policy can deny everything except same-origin
+		# CSS and images. If you ever add a script, this will be
+		# the thing that blocks it — that is intentional.
+		Content-Security-Policy "default-src 'none'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+
+		# Don't advertise the server software.
+		-Server
+	}
+
+	# Assets are content-stable, HTML is not. Cache accordingly, so an
+	# edit to index.html shows up immediately instead of a week later.
+	@static path *.css *.png *.jpg *.jpeg *.svg *.woff2 *.ico *.pdf
+	header @static Cache-Control "public, max-age=604800"
+
+	@html path *.html /
+	header @html Cache-Control "public, max-age=0, must-revalidate"
+
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+	}
+}
+
+# -------------------------------------------------------------------
+#  FALLBACK: DNS-01 validation
+#
+#  Everything above assumes port 80 reaches this Pi from the open
+#  internet, because that is how Caddy proves domain ownership to
+#  Let's Encrypt (the HTTP-01 challenge).
+#
+#  If your ISP blocks inbound port 80, or you are behind CGNAT, that
+#  will never work no matter how you configure the router. In that
+#  case you need DNS-01 validation instead, which requires a Caddy
+#  binary built with the DuckDNS DNS plugin:
+#
+#      xcaddy build --with github.com/caddy-dns/duckdns
+#
+#  Then add this block inside the site block above:
+#
+#      tls {
+#          dns duckdns YOUR_DUCKDNS_TOKEN
+#      }
+#
+#  See README.md for how to tell which situation you are in.
+# -------------------------------------------------------------------

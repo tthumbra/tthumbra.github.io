@@ -1,0 +1,317 @@
+/* ==================================================================
+   tanish thumbraguddi — personal site
+   hand-written css. no framework, no build step, no javascript.
+
+   layout notes:
+   the whole thing is a fixed character-width column (--measure).
+   because the font is monospace, every line wraps on the same
+   character boundary, so the page reads like a text file. that
+   is the one genuinely good thing about a monospace layout and
+   it is worth not breaking. keep all widths in ch units.
+   ================================================================== */
+
+:root {
+  --bg:      #100f0d;
+  --fg:      #d7d3c8;
+  --dim:     #7c776b;
+  --rule:    #2b2824;
+  --accent:  #e0a458;
+  --measure: 72ch;
+}
+
+/* amber-on-dark by default, paper in light mode. supporting both is
+   cheap and it is the difference between a site someone tuned and a
+   site someone generated. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:     #faf8f3;
+    --fg:     #23211c;
+    --dim:    #6e6a5e;
+    --rule:   #ded9cd;
+    --accent: #8a5200;
+  }
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  /* stop ios from inflating text in landscape and wrecking the grid */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 4rem 2ch 6rem;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "DejaVu Sans Mono", "Liberation Mono", monospace;
+  font-size: 15px;
+  line-height: 1.65;
+  font-variant-ligatures: none;
+}
+
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+/* ---- prompt line ------------------------------------------------ */
+/* used exactly once, at the top of the page. it is a label, not a
+   simulation: nothing types itself, nothing blinks, you cannot enter
+   commands into it. the moment it pretends to be interactive it stops
+   being a design and starts being a costume. */
+
+.prompt {
+  color: var(--dim);
+  margin: 0 0 1.75rem;
+  font-size: 0.9em;
+}
+
+.prompt .sigil { color: var(--accent); }
+
+/* ---- header ----------------------------------------------------- */
+
+header h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  color: var(--dim);
+  margin: 0.35rem 0 0;
+}
+
+nav {
+  margin: 1.5rem 0 0;
+}
+
+nav a + a { margin-left: 0;}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1ch;
+}
+
+nav li:not(:last-child)::after {
+  content: "·";
+  color: var(--rule);
+  margin-left: 1ch;
+}
+
+nav [aria-current="page"] {
+  color: var(--fg);
+  text-decoration-color: var(--accent);
+}
+
+/* ---- section rules ---------------------------------------------- */
+/* a heading followed by dashes that run to the end of the column.
+   the dashes are real characters clipped by overflow, so they land on
+   the monospace grid instead of floating above it like a css border. */
+
+h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 1ch;
+  margin: 3rem 0 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  /* The heading text is an anonymous flex item, so it can't be given
+     flex-shrink:0 directly. Without nowrap the dashes win the space
+     fight and a two-word heading breaks across lines, stranding the
+     second word underneath the rule. */
+  white-space: nowrap;
+}
+
+h2::after {
+  content: "────────────────────────────────────────────────────────────────────────────────";
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--rule);
+  letter-spacing: 0;
+  /* nudge the dashes onto the cap-height of the heading text */
+  transform: translateY(-0.15em);
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ---- text ------------------------------------------------------- */
+
+p {
+  margin: 0 0 1.1rem;
+  text-wrap: pretty;
+}
+
+p:last-child { margin-bottom: 0; }
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  text-decoration: none;
+}
+
+strong { font-weight: 700; }
+
+.dim { color: var(--dim); }
+
+/* ---- entries (projects, jobs, schools) -------------------------- */
+/* title on the left, dates flush right on the same baseline. on a
+   narrow screen they stack instead of colliding. */
+
+.entry { margin: 0 0 2rem; }
+.entry:last-child { margin-bottom: 0; }
+
+.entry-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 2ch;
+}
+
+.entry-meta {
+  color: var(--dim);
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.entry-where {
+  color: var(--dim);
+  margin: 0.15rem 0 0.6rem;
+  font-size: 0.9em;
+}
+
+.entry p { margin-bottom: 0.7rem; }
+
+.stack {
+  color: var(--dim);
+  font-size: 0.85em;
+  margin-top: 0.6rem;
+}
+
+.stack::before {
+  content: "› ";
+  color: var(--accent);
+}
+
+/* ---- plain lists ------------------------------------------------ */
+
+ul.bare {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.bare li {
+  margin-bottom: 0.4rem;
+  padding-left: 3ch;
+  text-indent: -3ch;
+}
+
+ul.bare li::before {
+  content: "$ ";
+  color: var(--accent);
+}
+
+/* skills: label column + value, aligned on the character grid */
+.spec {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 14ch 1fr;
+  gap: 0.45rem 1ch;
+}
+
+.spec dt { color: var(--dim); }
+.spec dd { margin: 0; }
+
+@media (max-width: 34rem) {
+  .spec {
+    grid-template-columns: 1fr;
+    gap: 0 0;
+  }
+  .spec dd { margin-bottom: 0.8rem; }
+}
+
+/* ---- footer ----------------------------------------------------- */
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--dim);
+  font-size: 0.85em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2ch;
+}
+
+/* ---- 404 -------------------------------------------------------- */
+
+.notfound-code {
+  color: var(--accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+/* ---- narrow screens --------------------------------------------- */
+
+@media (max-width: 34rem) {
+  body {
+    padding: 2.5rem 2ch 4rem;
+    font-size: 14px;
+  }
+  .entry-meta { white-space: normal; }
+}
+
+/* ---- respect the setting ---------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ---- print ------------------------------------------------------ */
+
+@media print {
+  :root {
+    --bg: #fff;
+    --fg: #000;
+    --dim: #444;
+    --rule: #bbb;
+    --accent: #000;
+  }
+  body { padding: 0; font-size: 11pt; }
+  nav, footer, .prompt { display: none; }
+  a { text-decoration: none; }
+}

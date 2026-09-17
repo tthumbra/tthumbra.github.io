@@ -1,0 +1,14 @@
+# Secrets — never commit these. This repository is public.
+duckdns.conf
+*.token
+.env
+
+# Local editor / OS noise
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Deploy scratch
+*.log

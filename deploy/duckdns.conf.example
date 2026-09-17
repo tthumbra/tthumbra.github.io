@@ -1,0 +1,11 @@
+# Copy to /etc/duckdns.conf on the Pi, then:
+#     sudo chown root:root /etc/duckdns.conf
+#     sudo chmod 600 /etc/duckdns.conf
+#
+# Never commit the filled-in version. This repository is public.
+
+# Just the subdomain — no ".duckdns.org" suffix.
+DUCKDNS_DOMAIN="tanish"
+
+# From https://www.duckdns.org — treat it like a password.
+DUCKDNS_TOKEN="paste-your-duckdns-token-here"

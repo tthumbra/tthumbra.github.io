@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects &mdash; Tanish Thumbraguddi</title>
+<meta name="description" content="Projects, experience, and education. Tanish Thumbraguddi, CS @ Purdue.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13' font-family='monospace'>%3E</text></svg>">
+</head>
+
+<body>
+<div class="page">
+
+  <p class="prompt"><span class="sigil">$</span> ls -la ~/projects</p>
+
+  <header>
+    <h1>Projects</h1>
+    <p class="tagline">What I've built, where I've worked, what I studied</p>
+
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/">index</a></li>
+        <li><a href="/projects.html" aria-current="page">projects</a></li>
+        <li><a href="mailto:tanishps2007@gmail.com">email</a></li>
+        <li><a href="https://github.com/TTanishps2007" rel="me noopener">github</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <h2>Projects</h2>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Drivetrain Physics Simulator</h3>
+        <span class="entry-meta">Sep 2025 &ndash; present</span>
+      </div>
+      <p class="entry-where">Purdue Electric Racing &mdash; drivetrain simulation &amp; controls</p>
+      <p>
+        Physics models in MATLAB that simulate EV drivetrain dynamics, so the team can
+        predict performance metrics up front instead of discovering them on track. Every
+        question the simulator answers is a physical testing cycle nobody has to run.
+      </p>
+      <p>
+        Steering and throttle response algorithms are derived from historical testing
+        data rather than idealized curves. That mattered most in the two regimes where
+        an idealized model is least honest — corner entry and hard acceleration — and
+        that is where simulation fidelity improved.
+      </p>
+      <p class="stack">MATLAB &middot; vehicle dynamics &middot; controls</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Autonomous Drone Search &amp; Rescue System</h3>
+        <span class="entry-meta">Feb 2024 &ndash; Aug 2024</span>
+      </div>
+      <p class="entry-where">Independent project</p>
+      <p>
+        An end-to-end autonomous drone platform for locating missing persons. A custom
+        CNN handles object detection, CUDA-accelerated so inference runs in real time on
+        the aircraft — a search drone that has to ask a ground station what it's looking
+        at is a search drone with a radio link as its single point of failure.
+      </p>
+      <p>
+        I built the full software stack in Python and Java: flight path planning,
+        onboard sensor fusion, and the glue between them. The hardware enclosure was
+        modeled in CAD. Field tests gave reliable detection performance, which is the
+        part that only shows up once ML, embedded software, and physical hardware have
+        to agree with each other in the same airframe.
+      </p>
+      <p class="stack">Python &middot; Java &middot; CUDA &middot; CNNs &middot; CAD</p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Clickbait Detection Model</h3>
+        <span class="entry-meta">Jan 2023 &ndash; Jul 2023</span>
+      </div>
+      <p class="entry-where">Inspirit AI program</p>
+      <p>
+        A CNN-based NLP classifier in TensorFlow that reads YouTube video transcripts
+        and predicts whether the title oversold them. Built the preprocessing pipeline
+        for tokenization and feature extraction, then tuned hyperparameters against
+        precision and recall.
+      </p>
+      <p>
+        This was my first pass through the whole ML lifecycle end to end — collection,
+        feature engineering, training, evaluation, and then standing up in front of
+        200+ people at an online demo to explain why the model did what it did.
+      </p>
+      <p class="stack">TensorFlow &middot; Python &middot; NLP &middot; text classification</p>
+    </div>
+
+    <h2>Experience</h2>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Math &amp; Java Tutor</h3>
+        <span class="entry-meta">Jun 2024 &ndash; Jul 2025</span>
+      </div>
+      <p class="entry-where">Aura Tek Consultancy</p>
+      <p>
+        One-on-one and group instruction in algebra through Calculus&nbsp;II and Java, to
+        70+ students. Designed Java project curricula — GUI applications, file-search
+        tools — to teach object-oriented programming through something that runs rather
+        than something that compiles.
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Martial Arts Instructor</h3>
+        <span class="entry-meta">Sep 2023 &ndash; Jan 2024</span>
+      </div>
+      <p class="entry-where">Vision Martial Arts</p>
+      <p>
+        Coached 120+ students in Taekwondo technique and ran structured knowledge
+        assessments across 200+ instructional hours.
+      </p>
+    </div>
+
+    <h2>Education</h2>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Purdue University</h3>
+        <span class="entry-meta">Aug 2025 &ndash; present</span>
+      </div>
+      <p class="entry-where">West Lafayette, IN</p>
+      <p>
+        B.S. Computer Science, junior standing by credits.
+        Purdue Electric Racing — drivetrain simulation and controls.
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Evergreen Valley High School</h3>
+        <span class="entry-meta">Aug 2021 &ndash; Jun 2025</span>
+      </div>
+      <p class="entry-where">San Jose, CA &mdash; GPA 3.91</p>
+      <p>
+        AP Computer Science A, Calculus AB/BC, Physics 1 and C, CSP, Spanish,
+        Macroeconomics, Government.
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="entry-head">
+        <h3>Evergreen Valley College</h3>
+        <span class="entry-meta">Aug 2022 &ndash; Jun 2023</span>
+      </div>
+      <p class="entry-where">Concurrent enrollment &mdash; GPA 4.0</p>
+      <p>Java and Python programming.</p>
+    </div>
+
+    <p><a href="/">&larr; Back to index</a></p>
+
+  </main>
+
+  <footer>
+    <span>Hand-written HTML. No JavaScript.</span>
+    <span>Served from a Raspberry Pi.</span>
+  </footer>
+
+</div>
+</body>
+</html>
